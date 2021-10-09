@@ -1,1 +1,54 @@
-<mxfile host="app.diagrams.net" modified="2021-10-09T09:28:00.795Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36" version="15.4.3" etag="b4IRno9iYG6waZ3lH_Su" type="github"><diagram id="LajkD7CIGhMCRTVBT5yx">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2021-10-09T09:37:38.884Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36" etag="MbRWG4T77-QVxkJwSYut" version="15.4.3" type="github">
+  <diagram id="LajkD7CIGhMCRTVBT5yx" name="Page-1">
+    <mxGraphModel dx="790" dy="544" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-1" value="&lt;b&gt;Computer, e.g. PC, Smartphone, ...&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="70" y="120" width="260" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-2" value="&lt;b&gt;Browser&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="240" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-10" value="I²C" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="RVF4NkdQc4H70TZ9WnmQ-4" target="RVF4NkdQc4H70TZ9WnmQ-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="390" />
+              <mxPoint x="510" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-11" value="I²C" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="RVF4NkdQc4H70TZ9WnmQ-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="400" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="650" y="380" />
+              <mxPoint x="650" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-4" value="&lt;b&gt;Embedded Computer&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="280" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-7" value="&lt;b&gt;UI &amp;amp;&amp;nbsp;Business Logic&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="90" y="190" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-3" value="&lt;b&gt;libPhyscialComputing.py&lt;br&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="300" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-5" value="&lt;b&gt;p5js.py&lt;br&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="220" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-6" value="&lt;b&gt;&amp;lt;libsSensor.py&amp;gt;&lt;br&gt;&lt;/b&gt;&lt;b&gt;&amp;lt;libsActuator.py&amp;gt;&lt;/b&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="260" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-8" value="&lt;b&gt;Sensor&lt;br&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="440" y="400" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RVF4NkdQc4H70TZ9WnmQ-9" value="&lt;b&gt;Actuator&lt;br&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="600" y="400" width="120" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
