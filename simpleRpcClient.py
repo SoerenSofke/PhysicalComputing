@@ -3,7 +3,7 @@ from simple_rpc import SerialInterface
 
 start = time.time()
 
-with SerialInterface('COM3', wait=0, baudrate=0) as interface:
+with SerialInterface('COM3', wait=0, baudrate=9600) as interface:
     end = time.time()
     print(end - start)
 

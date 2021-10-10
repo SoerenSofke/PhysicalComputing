@@ -2,7 +2,7 @@
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);  
-  Serial.begin(0);
+  Serial.begin(9600);
 }
 
 void setLed(byte brightness) {
@@ -13,7 +13,7 @@ int inc(int a) {
   return a + 1;
 }
 
-void loop(void) {
+void loop(void) { 
   interface(
     Serial,
     inc, "inc: Increment a value. @a: Value. @return: a + 1.",
