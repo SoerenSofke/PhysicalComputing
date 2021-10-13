@@ -4,11 +4,13 @@ const connect = document.getElementById('connect');
 const red = document.getElementById('red');
 const green = document.getElementById('green');
 const blue = document.getElementById('blue');
+const touch = document.getElementById('touch');
 
 connect.addEventListener('pointerdown', connectDevice)
 red.addEventListener('pointerdown', switchLedRed)
 green.addEventListener('pointerdown', switchLedGreen)
 blue.addEventListener('pointerdown', switchLedBlue)
+touch.addEventListener('pointerdown', fetchTouchValue)
 
 function connectDevice() {
   serial.init()
@@ -26,8 +28,21 @@ function switchLedBlue() {
   color(0, 0, 255)
 }
 
+function fetchTouchValue() {
+  // request function call  
+  const functionIndex = 1  
+  const dataTx = new Uint8Array([functionIndex])
+  serial.write(dataTx)
+
+  // obtain value
+  console.log(serial.value)
+}
+
 function color(red, green, blue, alpha = 255) {
   const functionIndex = 0
-  let dataTx = new Uint8Array([functionIndex, red, green, blue, alpha])
+  const dataTx = new Uint8Array([functionIndex, red, green, blue, alpha])
   serial.write(dataTx)
 }
+
+
+
