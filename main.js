@@ -15,16 +15,19 @@ function connectDevice() {
 }
 
 function switchLedRed() {
-  let dataTx = new Uint8Array([0x00, 0xFF, 0x00, 0x00, 0xFF])
-  serial.write(dataTx)
+  color(255, 0, 0)
 }
 
 function switchLedGreen() {
-  let dataTx = new Uint8Array([0x00, 0x00, 0xFF, 0x00, 0xFF])
-  serial.write(dataTx)
+  color(0, 255, 0)
 }
 
 function switchLedBlue() {
-  let dataTx = new Uint8Array([0x00, 0x00, 0x00, 0xFF, 0xFF])
+  color(0, 0, 255)
+}
+
+function color(red, green, blue, alpha = 255) {
+  const functionIndex = 0
+  let dataTx = new Uint8Array([functionIndex, red, green, blue, alpha])
   serial.write(dataTx)
 }
