@@ -1,23 +1,30 @@
 const serial = new WebSerial()
 
 const connect = document.getElementById('connect');
-const on = document.getElementById('ledOn');
-const off = document.getElementById('ledOff');
+const red = document.getElementById('red');
+const green = document.getElementById('green');
+const blue = document.getElementById('blue');
 
 connect.addEventListener('pointerdown', connectDevice)
-on.addEventListener('pointerdown', switchOn)
-off.addEventListener('pointerdown', switchOff)
+red.addEventListener('pointerdown', switchLedRed)
+green.addEventListener('pointerdown', switchLedGreen)
+blue.addEventListener('pointerdown', switchLedBlue)
 
 function connectDevice() {
   serial.init()
 }
 
-function switchOff() {
-  let code = [0x01, 0x00]
-  serial.write(code)
+function switchLedRed() {
+  let dataTx = new Uint8Array([0x00, 0xFF, 0x00, 0x00, 0xFF])
+  serial.write(dataTx)
 }
 
-function switchOn() {
-  let code = [0x01, 0xFF]
-  serial.write(code)
+function switchLedGreen() {
+  let dataTx = new Uint8Array([0x00, 0x00, 0xFF, 0x00, 0xFF])
+  serial.write(dataTx)
+}
+
+function switchLedBlue() {
+  let dataTx = new Uint8Array([0x00, 0x00, 0x00, 0xFF, 0xFF])
+  serial.write(dataTx)
 }

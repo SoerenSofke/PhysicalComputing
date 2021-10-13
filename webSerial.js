@@ -19,11 +19,7 @@ class WebSerial {
       }
     }    
   
-    async write(data) {     
-      var dataArrayBuffer = new ArrayBuffer(2);
-      var bufView = new Uint8Array(dataArrayBuffer);
-      bufView[0] = data[0]
-      bufView[1] = data[1]
-      return await this.writer.write(dataArrayBuffer);
+    async write(dataTx) {      
+      return await this.writer.write(dataTx.buffer);
     }    
   }
