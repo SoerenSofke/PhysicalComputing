@@ -29,13 +29,7 @@ function switchLedBlue() {
 }
 
 function fetchTouchValue() {
-  // request function call  
-  const functionIndex = 1  
-  const dataTx = new Uint8Array([functionIndex])
-  serial.write(dataTx)
-
-  // obtain value
-  console.log(serial.value)
+  console.log(serial.touchValue)
 }
 
 function color(red, green, blue, alpha = 255) {

@@ -16,7 +16,7 @@ class WebSerial {
                   // |reader| has been canceled.
                   break;
                 }
-                this.value = value
+                this.touchValue = value[0]
               }
             } catch (error) {
               // Handle |error|...

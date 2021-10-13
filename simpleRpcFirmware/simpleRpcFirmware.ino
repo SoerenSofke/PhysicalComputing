@@ -29,9 +29,9 @@ void setup() {
 void loop() {
   interface(
     Serial,
-    setColor, "setColor: Set pixel color. @red: Saturation, 0..255. @green: Saturation, 0..255. @blue: Saturation, 0..255. @alpha: Opacity, 0..255", 
-    getTouch, "getTouch: Get capacity value from touch pad. @return: Capacity value, 0..may"
-  );
+    setColor, "setColor: Set pixel color. @red: Saturation, 0..255. @green: Saturation, 0..255. @blue: Saturation, 0..255. @alpha: Opacity, 0..255"    
+  ); 
 
-  getTouch();
+  Serial.write(getTouch());
+  delay(1);
 }
