@@ -29,7 +29,8 @@ function switchLedBlue() {
 }
 
 function fetchTouchValue() {
-  console.log(serial.touchValue)
+  var jsObj = JSON.parse(serial.value);
+  console.log(jsObj)
 }
 
 function color(red, green, blue, alpha = 255) {
