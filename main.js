@@ -29,14 +29,18 @@ function switchLedBlue() {
 }
 
 function fetchTouchValue() {
-  var jsObj = JSON.parse(serial.value);
-  console.log(jsObj)
+  const jsObj = JSON.parse(serial.value)
+  console.log(JSON.stringify(jsObj))
+}
+
+function updateBoardState(parameter) {
+  const touchValue = parameter
+  console.log(touchValue)
 }
 
 function color(red, green, blue, alpha = 255) {
-  const functionIndex = 0
-  const dataTx = new Uint8Array([functionIndex, red, green, blue, alpha])
-  serial.write(dataTx)
+  const keyValues = JSON.stringify({ pixel: [red, green, blue, alpha] })
+  serial.write(keyValues)
 }
 
 

@@ -16,6 +16,10 @@ class LineBreakTransformer {
 }
 
 class WebSerial {
+  constructor() {
+    this.encoder = new TextEncoder();  
+  }
+
   async init() {
     if ('serial' in navigator) {
       try {
@@ -58,7 +62,8 @@ class WebSerial {
     }
   }
 
-  async write(dataTx) {
-    return await this.writer.write(dataTx.buffer);
+  async write(data) {
+    const dataArrayBuffer = this.encoder.encode(data);
+    return await this.writer.write(dataArrayBuffer);
   }
 }
