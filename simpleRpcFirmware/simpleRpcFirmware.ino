@@ -1,7 +1,7 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
-#include <RotaryEncoder.h>
-
+#include <MD_REncoder.h>
+#include <ZeroTC45.h>
 
 #define NUM_NEOPIXEL 1
 #define PIN_GND 2
@@ -11,8 +11,11 @@
 
 
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_NEOPIXEL, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
-RotaryEncoder encoder(PIN_ENCODER_A, PIN_ENCODER_B, RotaryEncoder::LatchMode::FOUR0);
+MD_REncoder rotary = MD_REncoder(PIN_ENCODER_A, PIN_ENCODER_B);
+static ZeroTC45 timer;
 
+long rotaryPosition = 0;
+String rotaryDirection = "none";
 
 void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
   pixel.setPixelColor(NUM_NEOPIXEL - 1, red, green, blue);
@@ -23,20 +26,8 @@ void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
 void publishInputStates() {
   StaticJsonDocument<1024> inputStates;
 
-  static int lastDirection = 0;
-  const int currentDirection = (int)encoder.getDirection();
-  if (currentDirection != 0) lastDirection = currentDirection;
-
-  switch (lastDirection) {
-    case -1:
-      inputStates["rotary"][1] = "ccw";
-      break;
-    case 1:
-      inputStates["rotary"][1] = "cw";
-      break;
-  }
-
-  inputStates["rotary"][0] = encoder.getPosition();
+  inputStates["rotary"][0] = rotaryPosition;
+  inputStates["rotary"][1] = rotaryDirection;
   inputStates["rotary"][2] = !digitalRead(PIN_ENCODER_SWITCH);
 
   serializeJson(inputStates, Serial);
@@ -74,20 +65,20 @@ void updateOutputStates() {
 }
 
 
-bool isPeriodPassed(const long period_ms) {
-  static unsigned long previousMillis = 0;
-  const unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= period_ms) {
-    previousMillis = currentMillis;
-    return true;
-  } else {
-    return false;
+void serveRotary() {
+  const uint8_t direction = rotary.read();
+  switch (direction) {
+    case DIR_NONE:
+      break;
+    case DIR_CW:
+      rotaryPosition++;
+      rotaryDirection = "cw";
+      break;
+    case DIR_CCW:
+      rotaryPosition--;
+      rotaryDirection = "ccw";
+      break;
   }
-}
-
-
-void checkPosition() {
-  encoder.tick();
 }
 
 
@@ -96,17 +87,20 @@ void setup() {
   digitalWrite(PIN_GND, LOW);
 
   pinMode(PIN_ENCODER_SWITCH, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_A), checkPosition, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B), checkPosition, CHANGE);
 
 
   Serial.begin(9600);
   Serial.setTimeout(1000);
   pixel.begin();
+  rotary.begin();
+  timer.begin(ZeroTC45::MILLISECONDS);
+    
+  timer.setTc5Callback(publishInputStates);
+  timer.startTc5(16);
 }
 
 
 void loop() {
   updateOutputStates();
-  if (isPeriodPassed(16)) publishInputStates();
+  serveRotary();  
 }
