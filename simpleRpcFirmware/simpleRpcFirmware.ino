@@ -2,6 +2,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <MD_REncoder.h>
 #include <ZeroTC45.h>
+#include <Debounce.h>
+
 
 #define NUM_NEOPIXEL 1
 #define PIN_GND 2
@@ -10,6 +12,7 @@
 #define PIN_ENCODER_B 3
 
 
+Debounce button = Debounce(PIN_ENCODER_SWITCH);
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_NEOPIXEL, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 MD_REncoder rotary = MD_REncoder(PIN_ENCODER_A, PIN_ENCODER_B);
 static ZeroTC45 timer;
@@ -28,7 +31,7 @@ void publishInputStates() {
 
   inputStates["rotary"][0] = rotaryPosition;
   inputStates["rotary"][1] = rotaryDirection;
-  inputStates["rotary"][2] = !digitalRead(PIN_ENCODER_SWITCH);
+  inputStates["rotary"][2] = button.read() == 1;
 
   serializeJson(inputStates, Serial);
   Serial.println();
@@ -96,11 +99,11 @@ void setup() {
   timer.begin(ZeroTC45::MILLISECONDS);
     
   timer.setTc5Callback(publishInputStates);
-  timer.startTc5(16);
+  timer.startTc5(16);  
 }
 
 
 void loop() {
   updateOutputStates();
-  serveRotary();  
+  serveRotary();
 }
