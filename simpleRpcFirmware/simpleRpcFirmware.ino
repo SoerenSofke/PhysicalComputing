@@ -3,6 +3,7 @@
 #include <MD_REncoder.h>
 #include <ZeroTC45.h>
 #include <Debounce.h>
+#include <Adafruit_TinyUSB.h>
 
 
 #define NUM_NEOPIXEL 1
@@ -10,6 +11,9 @@
 #define PIN_ENCODER_SWITCH 10
 #define PIN_ENCODER_A 1
 #define PIN_ENCODER_B 3
+
+Adafruit_USBD_WebUSB usb_web;
+WEBUSB_URL_DEF(landingPage, 1 /*https*/, "adafruit.github.io/Adafruit_TinyUSB_Arduino/examples/webusb-serial/index.html");
 
 
 Debounce button = Debounce(PIN_ENCODER_SWITCH);
@@ -32,28 +36,19 @@ void publishInputStates() {
   inputStates["rotary"][0] = rotaryPosition;
   inputStates["rotary"][1] = rotaryDirection;
   inputStates["rotary"][2] = button.read() == 1;
-
-  serializeJson(inputStates, Serial);
-  Serial.println();
-}
-
-
-void discardControlCharacters() {
-  while (isControl(Serial.peek())) {
-    Serial.read();
-  }
+  
+  serializeJson(inputStates, usb_web);
+  usb_web.write(10);
 }
 
 
 void updateOutputStates() {
-  if (Serial.available()) {
-
-    StaticJsonDocument<1024> outputStates;
-    DeserializationError error = deserializeJson(outputStates, Serial);
-
+  StaticJsonDocument<1024> outputStates;
+  
+  if (usb_web.available()) {    
+    DeserializationError error = deserializeJson(outputStates, usb_web);
+    
     if (error) {
-      Serial.print(F("deserializeJson() failed: "));
-      Serial.println(error.f_str());
     } else {
       uint8_t red         = outputStates["pixel"][0];
       uint8_t green       = outputStates["pixel"][1];
@@ -62,8 +57,6 @@ void updateOutputStates() {
 
       setColor(red, green, blue, alpha);
     }
-
-    discardControlCharacters();
   }
 }
 
@@ -91,19 +84,37 @@ void setup() {
 
   pinMode(PIN_ENCODER_SWITCH, INPUT_PULLUP);
 
-
-  Serial.begin(9600);
-  Serial.setTimeout(1000);
   pixel.begin();
+  pixel.setBrightness(255);
+  pixel.setPixelColor(NUM_NEOPIXEL - 1, 255, 0, 0);
+  
   rotary.begin();
   timer.begin(ZeroTC45::MILLISECONDS);
-    
+
+  usb_web.setLandingPage(&landingPage);
+  usb_web.setLineStateCallback(line_state_callback);
+  usb_web.begin();
+
+  while( !TinyUSBDevice.mounted() ) delay(1);
+
   timer.setTc5Callback(publishInputStates);
-  timer.startTc5(16);  
+  timer.startTc5(16);
 }
 
 
 void loop() {
   updateOutputStates();
-  serveRotary();
+  serveRotary();  
+}
+
+void line_state_callback(bool connected)
+{
+  pixel.setBrightness(255);
+
+  if (connected) {
+    pixel.setPixelColor(NUM_NEOPIXEL - 1, 0, 255, 0);
+  } else {
+    pixel.setPixelColor(NUM_NEOPIXEL - 1, 255, 0, 0);
+  }
+  pixel.show();
 }
