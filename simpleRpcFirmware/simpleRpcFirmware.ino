@@ -13,7 +13,7 @@
 #define PIN_ENCODER_B 3
 
 Adafruit_USBD_WebUSB usb_web;
-WEBUSB_URL_DEF(landingPage, 1 /*https*/, "adafruit.github.io/Adafruit_TinyUSB_Arduino/examples/webusb-serial/index.html");
+WEBUSB_URL_DEF(landingPage, 1 /*https*/, "soerensofke.github.io/PhysicalComputing/");
 
 
 Debounce button = Debounce(PIN_ENCODER_SWITCH);
@@ -86,8 +86,9 @@ void setup() {
 
   pixel.begin();
   pixel.setBrightness(255);
-  pixel.setPixelColor(NUM_NEOPIXEL - 1, 255, 0, 0);
-  
+  pixel.setPixelColor(NUM_NEOPIXEL - 1, 255, 255, 255);
+  pixel.show();
+
   rotary.begin();
   timer.begin(ZeroTC45::MILLISECONDS);
 
@@ -112,9 +113,9 @@ void line_state_callback(bool connected)
   pixel.setBrightness(255);
 
   if (connected) {
-    pixel.setPixelColor(NUM_NEOPIXEL - 1, 0, 255, 0);
+    pixel.setPixelColor(NUM_NEOPIXEL - 1, 0, 0, 0);
   } else {
-    pixel.setPixelColor(NUM_NEOPIXEL - 1, 255, 0, 0);
+    pixel.setPixelColor(NUM_NEOPIXEL - 1, 255, 255, 255);
   }
   pixel.show();
 }

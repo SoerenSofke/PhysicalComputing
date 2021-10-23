@@ -1,36 +1,46 @@
 const connectButton = document.getElementById('connectButton');
-const red = document.getElementById('red');
-const green = document.getElementById('green');
-const blue = document.getElementById('blue');
-const rotary = document.getElementById('rotary');
+const redButton = document.getElementById('redButton');
+const greenButton = document.getElementById('greenButton');
+const blueButton = document.getElementById('blueButton');
+const rotaryButton = document.getElementById('rotaryButton');
+const rotaryText = document.getElementById('rotaryText');
 
 connectButton.addEventListener('pointerdown', connectDevice)
-red.addEventListener('pointerdown', switchLedRed)
-green.addEventListener('pointerdown', switchLedGreen)
-blue.addEventListener('pointerdown', switchLedBlue)
-rotary.addEventListener('pointerdown', fetchRotaryValue)
+redButton.addEventListener('pointerdown', switchLedRed)
+greenButton.addEventListener('pointerdown', switchLedGreen)
+blueButton.addEventListener('pointerdown', switchLedBlue)
+rotaryButton.addEventListener('pointerdown', fetchRotaryValue)
 
 let port;
 let dataSteam = "";
 
 function connectDevice() {
   if (port) {
-    port.disconnect();
-    connectButton.value = 'Connect';
+    port.disconnect()
+    connectButton.value = 'Connect'
+    redButton.disabled = true
+    greenButton.disabled = true
+    blueButton.disabled = true
+    rotaryButton.disabled = true
+    rotaryText.value = ""
     port = null;
   } else {
     serial.requestPort().then(selectedPort => {
       port = selectedPort;
       connect();
     }).catch(error => {
-      console.log(error);
+      console.log(error)
     });
   }
 }
 
 function connect() {
   port.connect().then(() => {   
-    connectButton.value = 'Disconnect';
+    connectButton.value = 'Disconnect'
+    redButton.disabled = false
+    greenButton.disabled = false
+    blueButton.disabled = false
+    rotaryButton.disabled = false
 
     port.onReceive = data => {
       let textDecoder = new TextDecoder();
@@ -69,7 +79,8 @@ function switchLedBlue() {
 
 
 function fetchRotaryValue() {  
-  console.log(JSON.stringify(jsObj))
+  rotaryText.value = JSON.stringify(jsObj)
+
 }
 
 
