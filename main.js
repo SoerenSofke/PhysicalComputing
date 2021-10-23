@@ -5,14 +5,17 @@ const blueButton = document.getElementById('blueButton');
 const rotaryButton = document.getElementById('rotaryButton');
 const rotaryText = document.getElementById('rotaryText');
 
+
 connectButton.addEventListener('pointerdown', connectDevice)
 redButton.addEventListener('pointerdown', switchLedRed)
 greenButton.addEventListener('pointerdown', switchLedGreen)
 blueButton.addEventListener('pointerdown', switchLedBlue)
 rotaryButton.addEventListener('pointerdown', fetchRotaryValue)
 
+
 let port;
 let dataSteam = "";
+
 
 function connectDevice() {
   if (port) {
@@ -80,7 +83,6 @@ function switchLedBlue() {
 
 function fetchRotaryValue() {  
   rotaryText.value = JSON.stringify(jsObj)
-
 }
 
 
