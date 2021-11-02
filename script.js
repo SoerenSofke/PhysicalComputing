@@ -114,7 +114,7 @@ function draw() {
 
   rotate(rotary()*6);
   textSize(30);
-  text("Physical Computing . . .", 0, 90);  
+  text("Physical Computing", 0, 90);  
 
   brightness = map(mouseX, 0, 255, 0, 255, true);
   write({ pixel: [255, 0, 0, brightness] });
