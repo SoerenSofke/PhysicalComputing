@@ -1,8 +1,10 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
 #include <MD_REncoder.h>
-#include <ZeroTC45.h>
+//#include <ZeroTC45.h>
+#include <Every.h>
 #include <Debounce.h>
+#include <Servo.h>
 #include <Adafruit_TinyUSB.h>
 
 
@@ -11,6 +13,7 @@
 #define PIN_ENCODER_SWITCH 10
 #define PIN_ENCODER_A 1
 #define PIN_ENCODER_B 3
+#define PIN_SERVO_PWM 9
 
 Adafruit_USBD_WebUSB usb_web;
 WEBUSB_URL_DEF(landingPage, 1 /*https*/, "soerensofke.github.io/PhysicalComputing/");
@@ -19,7 +22,10 @@ WEBUSB_URL_DEF(landingPage, 1 /*https*/, "soerensofke.github.io/PhysicalComputin
 Debounce button = Debounce(PIN_ENCODER_SWITCH);
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_NEOPIXEL, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 MD_REncoder rotary = MD_REncoder(PIN_ENCODER_A, PIN_ENCODER_B);
-static ZeroTC45 timer;
+//static ZeroTC45 timer;
+Every tPublish(16);
+Servo servo;
+
 
 long rotaryPosition = 0;
 String rotaryDirection = "none";
@@ -56,6 +62,8 @@ void updateOutputStates() {
       uint8_t alpha       = outputStates["pixel"][3];
 
       setColor(red, green, blue, alpha);
+
+      servo.write(alpha);
     }
   }
 }
@@ -90,7 +98,9 @@ void setup() {
   pixel.show();
 
   rotary.begin();
-  timer.begin(ZeroTC45::MILLISECONDS);
+  servo.attach(PIN_SERVO_PWM);
+  
+  //timer.begin(ZeroTC45::MILLISECONDS);
 
   usb_web.setLandingPage(&landingPage);
   usb_web.setLineStateCallback(line_state_callback);
@@ -98,14 +108,18 @@ void setup() {
 
   while( !TinyUSBDevice.mounted() ) delay(1);
 
-  timer.setTc5Callback(publishInputStates);
-  timer.startTc5(16);
+  //timer.setTc5Callback(publishInputStates);
+  //timer.startTc5(16);
 }
 
 
 void loop() {
   updateOutputStates();
-  serveRotary();  
+  serveRotary();
+
+  if (tPublish()) {
+    publishInputStates();
+  }
 }
 
 void line_state_callback(bool connected)
