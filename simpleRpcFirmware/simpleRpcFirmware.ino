@@ -1,7 +1,6 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
 #include <MD_REncoder.h>
-//#include <ZeroTC45.h>
 #include <Every.h>
 #include <Debounce.h>
 #include <Servo.h>
@@ -22,7 +21,6 @@ WEBUSB_URL_DEF(landingPage, 1 /*https*/, "soerensofke.github.io/PhysicalComputin
 Debounce button = Debounce(PIN_ENCODER_SWITCH);
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_NEOPIXEL, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 MD_REncoder rotary = MD_REncoder(PIN_ENCODER_A, PIN_ENCODER_B);
-//static ZeroTC45 timer;
 Every tPublish(16);
 Servo servo;
 
@@ -100,16 +98,11 @@ void setup() {
   rotary.begin();
   servo.attach(PIN_SERVO_PWM);
   
-  //timer.begin(ZeroTC45::MILLISECONDS);
-
   usb_web.setLandingPage(&landingPage);
   usb_web.setLineStateCallback(line_state_callback);
   usb_web.begin();
 
   while( !TinyUSBDevice.mounted() ) delay(1);
-
-  //timer.setTc5Callback(publishInputStates);
-  //timer.startTc5(16);
 }
 
 
