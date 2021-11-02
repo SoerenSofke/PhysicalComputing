@@ -98,20 +98,33 @@ const write = async (objectTx) => {
 };
 
 function setup() {
-  createCanvas(255, 255);
-  frameRate(60);
+  createCanvas(400, 400);
+  textSize(30);
+  textAlign(CENTER, CENTER);
+  angleMode(DEGREES);
+  fill("white");
 }
 
 function draw() {
-  background(128);
-  try {
-    text(objectRx.rotary[0], 10, 30);
-    text(objectRx.rotary[1], 10, 50);
-    text(objectRx.rotary[2], 10, 70);
-    
-    circle(width/2, height/2, 10+20*abs(objectRx.rotary[0]));
-  } catch (err) {}
+  background(237, 34, 93, 60);
+
+  translate(width / 2, height / 2);
+  textSize(90);
+  text("p5*", 0, 0);
+
+  rotate(rotary()*6);
+  textSize(30);
+  text("Physical Computing . . .", 0, 90);  
 
   brightness = map(mouseX, 0, 255, 0, 255, true);
   write({ pixel: [255, 0, 0, brightness] });
+}
+
+function rotary() {
+  position = 0;
+  try {   
+    position = objectRx.rotary[0]
+  } catch (err) {}
+
+  return position
 }
