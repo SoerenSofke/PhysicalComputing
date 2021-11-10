@@ -12,7 +12,8 @@
 #define PIN_ENCODER_SWITCH 10
 #define PIN_ENCODER_A 1
 #define PIN_ENCODER_B 3
-#define PIN_SERVO_PWM 9
+#define PIN_SERVO_PWM_A 9
+#define PIN_SERVO_PWM_B 8
 
 Adafruit_USBD_WebUSB usb_web;
 WEBUSB_URL_DEF(landingPage, 1 /*https*/, "soerensofke.github.io/PhysicalComputing/");
@@ -22,7 +23,8 @@ Debounce button = Debounce(PIN_ENCODER_SWITCH);
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_NEOPIXEL, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 MD_REncoder rotary = MD_REncoder(PIN_ENCODER_A, PIN_ENCODER_B);
 Every tPublish(16);
-Servo servo;
+Servo servo_A;
+Servo servo_B;
 
 
 long rotaryPosition = 0;
@@ -61,7 +63,8 @@ void updateOutputStates() {
 
       setColor(red, green, blue, alpha);
 
-      servo.write(alpha);
+      servo_A.write(alpha);
+      servo_B.write(alpha);
     }
   }
 }
@@ -96,7 +99,8 @@ void setup() {
   pixel.show();
 
   rotary.begin();
-  servo.attach(PIN_SERVO_PWM);
+  servo_A.attach(PIN_SERVO_PWM_A);
+  servo_B.attach(PIN_SERVO_PWM_B);
   
   usb_web.setLandingPage(&landingPage);
   usb_web.setLineStateCallback(line_state_callback);
