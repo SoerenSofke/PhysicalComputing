@@ -116,8 +116,14 @@ function draw() {
   textSize(30);
   text("Physical Computing", 0, 90);  
 
-  brightness = map(mouseX, 0, 255, 0, 255, true);
+  brightness = map(mouseX, 0, width, 0, 255, true);
   write({ pixel: [255, 0, 0, brightness] });
+
+  position = map(mouseX, 0, width, 0, 180, true);
+  write({ servoA: position });
+
+  position = map(mouseY, 0, width, 0, 180, true);
+  write({ servoB: position });
 }
 
 function rotary() {

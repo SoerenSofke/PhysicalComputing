@@ -15,6 +15,7 @@
 #define PIN_SERVO_PWM_A 9
 #define PIN_SERVO_PWM_B 8
 
+
 Adafruit_USBD_WebUSB usb_web;
 WEBUSB_URL_DEF(landingPage, 1 /*https*/, "soerensofke.github.io/PhysicalComputing/");
 
@@ -23,8 +24,8 @@ Debounce button = Debounce(PIN_ENCODER_SWITCH);
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(NUM_NEOPIXEL, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 MD_REncoder rotary = MD_REncoder(PIN_ENCODER_A, PIN_ENCODER_B);
 Every tPublish(16);
-Servo servo_A;
-Servo servo_B;
+Servo servoA;
+Servo servoB;
 
 
 long rotaryPosition = 0;
@@ -42,29 +43,35 @@ void publishInputStates() {
   inputStates["rotary"][0] = rotaryPosition;
   inputStates["rotary"][1] = rotaryDirection;
   inputStates["rotary"][2] = button.read() == 1;
-  
+
   serializeJson(inputStates, usb_web);
   usb_web.write(10);
 }
 
 
-void updateOutputStates() {
-  StaticJsonDocument<1024> outputStates;
-  
-  if (usb_web.available()) {    
+void updateOutputStates() {  
+  if (usb_web.available()) {
+    StaticJsonDocument<1024> outputStates;
     DeserializationError error = deserializeJson(outputStates, usb_web);
-    
-    if (error) {
-    } else {
-      uint8_t red         = outputStates["pixel"][0];
-      uint8_t green       = outputStates["pixel"][1];
-      uint8_t blue        = outputStates["pixel"][2];
-      uint8_t alpha       = outputStates["pixel"][3];
 
-      setColor(red, green, blue, alpha);
+    if (!error) {
+      if (outputStates.containsKey("pixel")) {
+        uint8_t red   = outputStates["pixel"][0];
+        uint8_t green = outputStates["pixel"][1];
+        uint8_t blue  = outputStates["pixel"][2];
+        uint8_t alpha = outputStates["pixel"][3];
+        setColor(red, green, blue, alpha);
+      }
 
-      servo_A.write(alpha);
-      servo_B.write(alpha);
+      if (outputStates.containsKey("servoA")) {
+        uint8_t position = outputStates["servoA"];
+        servoA.write(position);
+      }
+
+      if (outputStates.containsKey("servoB")) {
+        uint8_t position = outputStates["servoB"];
+        servoB.write(position);
+      }
     }
   }
 }
@@ -99,14 +106,14 @@ void setup() {
   pixel.show();
 
   rotary.begin();
-  servo_A.attach(PIN_SERVO_PWM_A);
-  servo_B.attach(PIN_SERVO_PWM_B);
-  
+  servoA.attach(PIN_SERVO_PWM_A);
+  servoB.attach(PIN_SERVO_PWM_B);
+
   usb_web.setLandingPage(&landingPage);
   usb_web.setLineStateCallback(line_state_callback);
   usb_web.begin();
 
-  while( !TinyUSBDevice.mounted() ) delay(1);
+  while ( !TinyUSBDevice.mounted() ) delay(1);
 }
 
 
