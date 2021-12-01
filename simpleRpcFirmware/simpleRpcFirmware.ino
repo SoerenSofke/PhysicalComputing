@@ -1,6 +1,6 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
-#include <MD_REncoder.h>
+#include <MD_REncoder.h> // ENABLE_HALF_STEP set to 1
 #include <Every.h>
 #include <Debounce.h>
 #include <Servo.h>
@@ -28,7 +28,7 @@ Servo servoA;
 Servo servoB;
 
 
-long rotaryPosition = 0;
+double rotaryPosition = 0;
 String rotaryDirection = "none";
 
 void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
@@ -40,7 +40,7 @@ void setColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
 void publishInputStates() {
   StaticJsonDocument<1024> inputStates;
 
-  inputStates["rotary"][0] = rotaryPosition;
+  inputStates["rotary"][0] = rotaryPosition/2;
   inputStates["rotary"][1] = rotaryDirection;
   inputStates["rotary"][2] = button.read() == 1;
 
