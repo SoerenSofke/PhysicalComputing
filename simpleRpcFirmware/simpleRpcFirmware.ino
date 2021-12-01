@@ -49,10 +49,10 @@ void publishInputStates() {
 }
 
 
-void updateOutputStates() {  
+void updateOutputStates() {
   if (usb_web.available()) {
     StaticJsonDocument<1024> outputStates;
-    DeserializationError error = deserializeJson(outputStates, usb_web);
+    DeserializationError error = deserializeJson(outputStates, usb_web);    
 
     if (!error) {
       if (outputStates.containsKey("pixel")) {
@@ -71,7 +71,7 @@ void updateOutputStates() {
       if (outputStates.containsKey("servoB")) {
         uint8_t position = outputStates["servoB"];
         servoB.write(position);
-      }
+      }      
     }
   }
 }
@@ -109,8 +109,15 @@ void setup() {
   servoA.attach(PIN_SERVO_PWM_A);
   servoB.attach(PIN_SERVO_PWM_B);
 
+  uint8_t neutralPosition = 90;
+  servoA.write(neutralPosition);
+  servoB.write(neutralPosition);
+
+  Serial.begin(115200);
+
   usb_web.setLandingPage(&landingPage);
   usb_web.setLineStateCallback(line_state_callback);
+  usb_web.setTimeout(1);
   usb_web.begin();
 
   while ( !TinyUSBDevice.mounted() ) delay(1);
@@ -126,14 +133,31 @@ void loop() {
   }
 }
 
+void flushRxBuffer() {
+  while (usb_web.available()) {
+      usb_web.read();
+    }
+}
+
 void line_state_callback(bool connected)
 {
-  pixel.setBrightness(255);
+  if (connected) {        
+    delay(500);
+    flushRxBuffer();
 
-  if (connected) {
+    pixel.setBrightness(255);
     pixel.setPixelColor(NUM_NEOPIXEL - 1, 0, 0, 0);
-  } else {
+    pixel.show();    
+  } else {        
+    uint8_t neutralPosition = 90;
+    servoA.write(neutralPosition);
+    servoB.write(neutralPosition);
+
+    pixel.setBrightness(255);
     pixel.setPixelColor(NUM_NEOPIXEL - 1, 255, 255, 255);
+    pixel.show();
+
+    delay(500);
+    flushRxBuffer();
   }
-  pixel.show();
 }
