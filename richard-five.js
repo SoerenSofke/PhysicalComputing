@@ -4,7 +4,7 @@ Reference:
 * https://css-tricks.com/the-flavors-of-object-oriented-programming-in-javascript/
 */
 
-function createBrick() {
+function createRichard() {
   let device = { opened: false };
   let interfaceNumber;
   let endpointOut;

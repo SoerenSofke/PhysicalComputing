@@ -1,39 +1,39 @@
-const brick = createBrick();
+const rick = createRichard();
 
 function mousePressed() {
-  brick.toggleConnect()
+  rick.toggleConnect()
 }
 
 function setup() {
-  createCanvas(400, 400);  
+  createCanvas(500, 500);  
   textAlign(CENTER, CENTER);
   angleMode(DEGREES);
-  
-  colorCode1 = [255, 255, 255]
-  colorCode2 = [237, 34, 93]
+
+  colorBright = [255, 255, 255]
+  colorDark = [237, 34, 93]
 }
 
 function draw() {
-  if (brick.knobIsPressed === true) {
-    colorBackground = colorCode1
-    colorForeground = colorCode2
-  } else {
-    colorBackground = colorCode2
-    colorForeground = colorCode1
-  }
-
+  const [colorBackground, colorForeground] = rick.knobIsPressed ? [colorBright, colorDark] : [colorDark, colorBright]
   background(colorBackground);
   fill(colorForeground);
+    
+  const verb = rick.isConnected ? 'disconnect' : 'connect';
+  
+  textStyle(NORMAL);
+  textSize(11);
+  text('Click in the web page to ' + verb + ' Richard-Five.', width / 2, 10)
+  
+  textSize(20);
+  text("King of purely browser-based physical computing.", width /2, height / 1.6);
 
-  textSize(90);
-  text("p5*", width / 2, height / 2);
-
-  translate(width / 2, height / 2);
-  rotate(brick.knobPosition * 6);
-  textSize(30);
-  text("Physical Computing", 0, 90);
-
-  brick.ledColor(255, 0, 0, mouseX / width * 255)
-  brick.servoA(mouseX / width)
-  brick.servoB(mouseY / height)
+  textStyle(BOLD);
+  textSize(75);
+  translate(width / 2, height / 2 );
+  rotate(rick.knobPosition * 6);  
+  text("Richard-Five", 0,0);
+  
+  rick.ledColor(255, 0, 0, mouseX / width * 255)
+  rick.servoA(mouseX / width)
+  rick.servoB(mouseY / height)
 }
