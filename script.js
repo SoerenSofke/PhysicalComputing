@@ -7,6 +7,9 @@ function createBrick() {
   let endpointIn;
   let keyValueRx = "";
   let objectRx = "";
+  let knobPosition = 0
+  let knobDirection = 0
+  let knobIsPressed = 0
 
   const open = async () => {
     device = await navigator.usb.requestDevice({
@@ -71,6 +74,7 @@ function createBrick() {
       keyValueRx = last.join("\n");
     } catch (err) { }
 
+    serveRotary();
     read();
   };
 
@@ -82,15 +86,28 @@ function createBrick() {
     }
   };
 
+  const serveRotary = () => {
+    knobPosition = 0;
+    try {
+      knobPosition = objectRx.rotary[0]
+      knobDirection = objectRx.rotary[1]
+      knobIsPressed = objectRx.rotary[2]
+    } catch (err) { }
+  }
+
   const brick = {
-    isConnected: function () { return device.opened },
     connect: function () { open() },
-    disconnect: function () { close() },
-    write: function (dataTx) { write(dataTx) },
-    getObjectRx: function () { return objectRx },
+    disconnect: function () { close() },        
+    get isConnected() { return device.opened },    
+    get knobPosition() { return knobPosition },
+    get knobDirection() { return knobDirection },
+    get knobIsPressed() { return knobIsPressed },
+    ledColor: function (red = 0, green = 0, blue = 0, brightness = 255) { write({ pixel: [red, green, blue, brightness] }) },
+    servoA: function (shaftValue = 0.5) { write({ servoA: map(shaftValue, 0, 1, 0, 180, true) }) },
+    servoB: function (shaftValue = 0.5) { write({ servoB: map(shaftValue, 0, 1, 0, 180, true) }) },
   };
 
-  return brick;
+  return brick
 }
 
 function setup() {
@@ -103,40 +120,24 @@ function setup() {
 }
 
 function draw() {
-  background(237, 34, 93, 60);    
+  background(237, 34, 93, 60);
 
   translate(width / 2, height / 2);
   textSize(90);
   text("p5*", 0, 0);
 
-  rotate(rotary() * 6);
+  rotate(brick.knobPosition * 6);
   textSize(30);
   text("Physical Computing", 0, 90);
 
-  brightness = map(mouseX, 0, width, 0, 255, true);
-  brick.write({ pixel: [255, 0, 0, brightness] });
-
-  position = map(mouseX, 0, width, 0, 180, true);
-  brick.write({ servoA: position });
-
-  position = map(mouseY, 0, width, 0, 180, true);
-  brick.write({ servoB: position });
+  brick.ledColor(255, 0, 0, mouseX / width * 255)
+  brick.servoA(mouseX / width)
+  brick.servoB(mouseY / height)
 }
 
 function mousePressed() {
-  if (brick.isConnected())
+  if (brick.isConnected)
     brick.disconnect()
   else
     brick.connect()
-}
-
-
-function rotary() {
-  position = 0;
-  try {
-    objectRx = brick.getObjectRx()
-    position = objectRx.rotary[0]
-  } catch (err) { }
-
-  return position
 }
