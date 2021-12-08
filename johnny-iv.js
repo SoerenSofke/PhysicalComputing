@@ -4,7 +4,7 @@ Reference:
 * https://css-tricks.com/the-flavors-of-object-oriented-programming-in-javascript/
 */
 
-function createRichard() {
+function createBoard() {
   let device = { opened: false };
   let interfaceNumber;
   let endpointOut;
@@ -114,7 +114,7 @@ function createRichard() {
     get knobPosition() { return knobPosition },
     get knobDirection() { return knobDirection },
     get knobIsPressed() { return knobIsPressed },
-    ledColor: function (red = 0, green = 0, blue = 0, brightness = 255) { write({ pixel: [red, green, blue, brightness] }) },
+    led: function (red = 0, green = 0, blue = 0, brightness = 255) { write({ pixel: [red, green, blue, brightness] }) },
     servoA: function (shaftValue = 0.5) { write({ servoA: map(shaftValue, 0, 1, 0, 180, true) }) },
     servoB: function (shaftValue = 0.5) { write({ servoB: map(shaftValue, 0, 1, 0, 180, true) }) },
   };
