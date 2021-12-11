@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: Johnny-IV.io
 
 markdown_extensions:
   - meta
@@ -24,8 +24,10 @@ theme:
     primary: yellow
     accent: indigo
   features:
-    - navigation.instant
-    - navigation.tracking
+   - navigation.instant
+   - navigation.tracking
+   - navigation.tabs
+   - navigation.tabs.sticky
 
     
 
